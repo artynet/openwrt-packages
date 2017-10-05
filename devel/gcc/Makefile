@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gcc
 PKG_VERSION:=5.4.0
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_SOURCE_URL:=@GNU/gcc/gcc-$(PKG_VERSION)
 PKG_HASH:=608df76dec2d34de6558249d8af4cbee21eceddbcb580d666f7a5a583ca3303a
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -49,30 +49,30 @@ define Package/gcc/description
 	build a native toolchain for compiling on target
 endef
 
-GMPSRC=gmp-4.3.2
+GMPSRC=gmp-6.1.2
 
 define Download/gmp
-  URL:=ftp://gcc.gnu.org/pub/gcc/infrastructure/
+  URL:=https://ftp.gnu.org/pub/gnu/gmp/
   FILE:=$(GMPSRC).tar.bz2
-  HASH:=936162c0312886c21581002b79932829aa048cfaf9937c6265aeaa14f1cd1775
+  HASH:=5275bb04f4863a13516b2f39392ac5e272f5e1bb8057b18aec1c9b79d73d8fb2
 endef
 $(eval $(call Download,gmp))
 
-MPCSRC=mpc-0.8.1
+MPCSRC=mpc-1.0.3
 
 define Download/mpc
-  URL:=ftp://gcc.gnu.org/pub/gcc/infrastructure/
+  URL:=https://ftp.gnu.org/pub/gnu/mpc/
   FILE:=$(MPCSRC).tar.gz
-  HASH:=e664603757251fd8a352848276497a4c79b7f8b21fd8aedd5cc0598a38fee3e4
+  HASH:=617decc6ea09889fb08ede330917a00b16809b8db88c29c31bfbb49cbf88ecc3
 endef
 $(eval $(call Download,mpc))
 
-MPFRSRC=mpfr-2.4.2
+MPFRSRC=mpfr-3.1.6
 
 define Download/mpfr
-  URL:=ftp://gcc.gnu.org/pub/gcc/infrastructure/
+  URL:=https://ftp.gnu.org/pub/gnu/mpfr/
   FILE:=$(MPFRSRC).tar.bz2
-  HASH:=c7e75a08a8d49d2082e4caee1591a05d11b9d5627514e678f02d66a124bcf2ba
+  HASH:=cf4f4b2d80abb79e820e78c8077b6725bbbb4e8f41896783c899087be0e94068
 endef
 $(eval $(call Download,mpfr))
 
@@ -86,10 +86,6 @@ define Build/Prepare
 	tar -C $(PKG_BUILD_DIR) -xvjf $(DL_DIR)/$(MPFRSRC).tar.bz2
 	ln -sf $(PKG_BUILD_DIR)/$(MPFRSRC) $(PKG_BUILD_DIR)/mpfr
 	$(Build/Patch)
-#	poor man's fix for `none-openwrt-linux' not recognized when building with musl
-	cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/mpfr/
-	cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/gmp/
-	cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/mpc/
 endef
 
 
