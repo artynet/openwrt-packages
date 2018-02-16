@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=node
-PKG_VERSION:=v4.4.5
+PKG_VERSION:=v8.9.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=node-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://nodejs.org/dist/${PKG_VERSION}
-PKG_MD5SUM:=376140907bbe362f36065a30af04f020
+PKG_MD5SUM:=631ed102fe58c13cf63bc92a68cf4759
 
 HOST_BUILD_DEPENDS:=python/host
 PKG_BUILD_DEPENDS:=python/host
@@ -55,6 +55,7 @@ CONFIGURE_ARGS= \
 	--without-snapshot \
 	--shared-zlib \
 	--shared-openssl \
+	--without-intl \
 	--prefix=/usr
 
 ifneq ($(findstring arm,$(ARCH)),)
