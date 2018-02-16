@@ -26,8 +26,9 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mozilla-iot-gateway
-  SECTION:=Network
-  CATEGORY:=IoT
+  SECTION:=lang
+  CATEGORY:=Languages
+  SUBMENU:=Node.js
   TITLE:=Mozilla IoT Gateway
   DEPENDS:=+libc +libstdcpp +node +libopenzwave +python +openssl-util
   MAINTAINER:=Arturo Rinaldi <arty.net2@gmail.com>
