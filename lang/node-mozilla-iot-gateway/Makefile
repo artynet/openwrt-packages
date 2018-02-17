@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mozilla-iot-gateway
 PKG_VERSION:=0.3.0
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_REV:=0.3.0-lede
 
@@ -19,19 +19,24 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_REV)
 PKG_SOURCE_VERSION=$(PKG_REV)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_REV).tar.gz
 
+PKG_BUILD_DEPENDS:=node/host
 PKG_NODE_VERSION:=8.9.4
+
+PKG_MAINTAINER:=Arturo Rinaldi <arty.net2@gmail.com>
+PKG_LICENSE:=Custom
+PKG_LICENSE_FILES:=LICENSE
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mozilla-iot-gateway
+  DEPENDS:=+node +libopenzwave +python +openssl-util
   SECTION:=lang
   CATEGORY:=Languages
   SUBMENU:=Node.js
   TITLE:=Mozilla IoT Gateway
-  DEPENDS:=+libc +libstdcpp +node +libopenzwave +python +openssl-util
-  MAINTAINER:=Arturo Rinaldi <arty.net2@gmail.com>
+  URL:=https://iot.mozilla.org/gateway/
 endef
 
 define Package/mozilla-iot-gateway/description
