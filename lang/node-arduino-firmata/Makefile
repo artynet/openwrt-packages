@@ -9,17 +9,17 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=arduino-firmata
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=0.3.3
-PKG_RELEASE:=5
+PKG_VERSION:=0.3.4
+PKG_RELEASE:=6
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/shokai/node-arduino-firmata.git
-PKG_SOURCE_VERSION:=16e76007edf218d72df590adbd711ac6b7432845
+PKG_SOURCE_VERSION:=v0.3.4
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_SOURCE_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_BUILD_DEPENDS:=node/host
-PKG_NODE_VERSION:=4.4.5
+PKG_NODE_VERSION:=8.9.4
 
 PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
 PKG_LICENSE:=MIT
@@ -59,7 +59,7 @@ endef
 
 define Package/node-arduino-firmata/install
 	mkdir -p $(1)/usr/lib/node
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/node_modules/* $(1)/usr/lib/node
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/node_modules/ $(1)/usr/lib/node
 	rm -rf $(1)/usr/lib/node/arduino-firmata/node_modules/serialport/ 
 	$(CP) ./files/* $(1)/
 endef
