@@ -8,14 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gcc
-PKG_VERSION:=5.4.0
+PKG_VERSION:=7.3.0
 PKG_RELEASE:=3
 PKG_SOURCE_URL:=@GNU/gcc/gcc-$(PKG_VERSION)
-PKG_HASH:=608df76dec2d34de6558249d8af4cbee21eceddbcb580d666f7a5a583ca3303a
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_HASH:=832ca6ae04636adbb430e865a1451adf6979ab44ca1c8374f61fba65645ce15c
+PKG_SOURCE:=gcc-$(PKG_VERSION).tar.xz
 PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 PKG_BUILD_PARALLEL:=1
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/gcc-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -50,30 +52,30 @@ define Package/gcc/description
 	build a native toolchain for compiling on target
 endef
 
-GMPSRC=gmp-4.3.2
+GMPSRC=gmp-6.1.2
 
 define Download/gmp
-  URL:=ftp://gcc.gnu.org/pub/gcc/infrastructure/
+  URL:=https://ftp.gnu.org/pub/gnu/gmp/
   FILE:=$(GMPSRC).tar.bz2
-  HASH:=936162c0312886c21581002b79932829aa048cfaf9937c6265aeaa14f1cd1775
+  HASH:=5275bb04f4863a13516b2f39392ac5e272f5e1bb8057b18aec1c9b79d73d8fb2
 endef
 $(eval $(call Download,gmp))
 
-MPCSRC=mpc-0.8.1
+MPCSRC=mpc-1.1.0
 
 define Download/mpc
-  URL:=ftp://gcc.gnu.org/pub/gcc/infrastructure/
+  URL:=https://ftp.gnu.org/pub/gnu/mpc/
   FILE:=$(MPCSRC).tar.gz
-  HASH:=e664603757251fd8a352848276497a4c79b7f8b21fd8aedd5cc0598a38fee3e4
+  HASH:=6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e
 endef
 $(eval $(call Download,mpc))
 
-MPFRSRC=mpfr-2.4.2
+MPFRSRC=mpfr-4.0.1
 
 define Download/mpfr
-  URL:=ftp://gcc.gnu.org/pub/gcc/infrastructure/
+  URL:=https://ftp.gnu.org/pub/gnu/mpfr/
   FILE:=$(MPFRSRC).tar.bz2
-  HASH:=c7e75a08a8d49d2082e4caee1591a05d11b9d5627514e678f02d66a124bcf2ba
+  HASH:=a4d97610ba8579d380b384b225187c250ef88cfe1d5e7226b89519374209b86b
 endef
 $(eval $(call Download,mpfr))
 
@@ -88,13 +90,15 @@ define Build/Prepare
 	ln -sf $(PKG_BUILD_DIR)/$(MPFRSRC) $(PKG_BUILD_DIR)/mpfr
 	$(Build/Patch)
 #	poor man's fix for `none-openwrt-linux' not recognized when building with musl
-	cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/mpfr/
-	cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/gmp/
-	cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/mpc/
+	# cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/mpfr/
+	# cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/gmp/
+	# cp $(PKG_BUILD_DIR)/config.sub $(PKG_BUILD_DIR)/mpc/
 endef
 
 TARGET_CXX += -std=gnu++03
 CONFIGURE_ARGS += CXX_FOR_TARGET="$(TARGET_CXX)" CXXFLAGS_FOR_TARGET="-g -O2 -D_GLIBCXX_INCLUDE_NEXT_C_HEADERS"
+
+# TARGET_LDFLAGS += -lstdc++ -lgcc_s -lgcc_eh
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
@@ -102,7 +106,6 @@ define Build/Configure
 		$(TARGET_CONFIGURE_OPTS) \
 		$(PKG_BUILD_DIR)/configure \
 			$(CONFIGURE_ARGS) \
-			--build=$(GNU_HOST_NAME) \
 			--host=$(REAL_GNU_TARGET_NAME) \
 			--target=$(REAL_GNU_TARGET_NAME) \
 			--enable-languages=$(TARGET_LANGUAGES) \

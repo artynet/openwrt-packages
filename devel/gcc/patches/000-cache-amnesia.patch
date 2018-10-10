@@ -1,0 +1,22 @@
+--- a/gcc/configure	2017-11-21 10:31:12.135035000 +0100
++++ b/gcc/configure	2018-10-09 01:27:11.166147824 +0200
+@@ -11783,7 +11783,7 @@
+ 	CXX="${CXX_FOR_BUILD}" CXXFLAGS="${CXXFLAGS_FOR_BUILD}" \
+ 	LD="${LD_FOR_BUILD}" LDFLAGS="${LDFLAGS_FOR_BUILD}" \
+ 	GMPINC="" CPPFLAGS="${CPPFLAGS} -DGENERATOR_FILE" \
+-	${realsrcdir}/configure \
++	CONFIG_SITE= ${realsrcdir}/configure --cache-file=./other.cache \
+ 		--enable-languages=${enable_languages-all} \
+ 		--target=$target_alias --host=$build_alias --build=$build_alias
+ 
+--- a/gcc/configure.ac	2017-11-21 10:31:12.135035000 +0100
++++ b/gcc/configure.ac	2018-10-09 01:27:54.638430495 +0200
+@@ -1709,7 +1709,7 @@
+ 	CXX="${CXX_FOR_BUILD}" CXXFLAGS="${CXXFLAGS_FOR_BUILD}" \
+ 	LD="${LD_FOR_BUILD}" LDFLAGS="${LDFLAGS_FOR_BUILD}" \
+ 	GMPINC="" CPPFLAGS="${CPPFLAGS} -DGENERATOR_FILE" \
+-	${realsrcdir}/configure \
++   CONFIG_SITE= ${realsrcdir}/configure --cache-file=./other.cache \
+ 		--enable-languages=${enable_languages-all} \
+ 		--target=$target_alias --host=$build_alias --build=$build_alias
+ 
