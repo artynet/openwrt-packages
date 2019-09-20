@@ -17,20 +17,20 @@ define Package/gcc
   CATEGORY:=Development
   TITLE:=gcc
   MAINTAINER:=Noble Pepper <gccmaintain@noblepepper.com>
-  DEPENDS:= +binutils +libstdcpp @!arc
+  DEPENDS:= +binutils +libstdcpp +libgfortran @!arc
   MENU:=1
 endef
 
 PKG_NAME:=gcc
-PKG_VERSION=7.3.0
-PKG_RELEASE:=4
+PKG_VERSION=7.4.0
+PKG_RELEASE:=5
 PKG_SOURCE_URL:=@GNU/gcc/gcc-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 PKG_BUILD_PARALLEL:=1
 
-PKG_HASH:=832ca6ae04636adbb430e865a1451adf6979ab44ca1c8374f61fba65645ce15c
+PKG_HASH:=eddde28d04f334aec1604456e536416549e9b1aa137fc69204e65eb0c009fe51
 
 define Package/gcc/config
   source "$(SOURCE)/Config.in"
@@ -140,6 +140,7 @@ define Build/Configure
 			--disable-libvtv \
 			--disable-libcilkrts \
 			--disable-libmudflap \
+			--disable-libmpx \
 			--disable-multilib \
 			--disable-libgomp \
 			--disable-libquadmath \
@@ -181,8 +182,11 @@ define Package/gcc/install
 	ln -s $(REAL_GNU_TARGET_NAME)-g++ $(1)/usr/bin/c++
 	ln -s $(REAL_GNU_TARGET_NAME)-g++ $(1)/usr/bin/g++
 	ln -s $(REAL_GNU_TARGET_NAME)-g++ $(1)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++
+	ln -s $(REAL_GNU_TARGET_NAME)-gcc $(1)/usr/bin/cc
 	ln -s $(REAL_GNU_TARGET_NAME)-gcc $(1)/usr/bin/gcc
 	ln -s $(REAL_GNU_TARGET_NAME)-gcc $(1)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc-$(PKG_VERSION)
+	ln -s $(REAL_GNU_TARGET_NAME)-gfortran $(1)/usr/bin/gfortran
+	ln -s $(REAL_GNU_TARGET_NAME)-gfortran $(1)/usr/bin/$(REAL_GNU_TARGET_NAME)-gfortran
 	cp -ar $(PKG_INSTALL_DIR)/usr/lib/gcc $(1)/usr/lib
 	cp -ar $(TOOLCHAIN_DIR)/include $(1)/usr
 	cp -a $(TOOLCHAIN_DIR)/lib/*.{o,so*} $(1)/usr/lib/$(PKG_NAME)/$(REAL_GNU_TARGET_NAME)/$(PKG_VERSION)
